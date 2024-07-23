@@ -1,0 +1,32 @@
+import sqlite3
+
+def insert_user(cep, email):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        # Verifica se o e-mail já existe no banco de dados
+        cursor.execute("SELECT * FROM user WHERE email=?", (email,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            print("Este e-mail já está cadastrado.")
+            return False
+
+        # Se o e-mail não existe, realiza a inserção
+        cursor.execute("INSERT INTO user (cep, email) VALUES (?, ?)", (cep, email))
+        conn.commit()
+        print("Usuário cadastrado com sucesso!")
+        return True
+
+    except sqlite3.Error as error:
+        print("Erro ao inserir usuário:", error)
+        return False
+
+    finally:
+        if conn:
+            conn.close()
+
+# Exemplo de uso
+cep = "04854200"
+email = ""
+insert_user(cep, email)
