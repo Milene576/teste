@@ -1,0 +1,248 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Atualize-se com as últimas notícias sobre desastres naturais no Brasil. Veja gráficos informativos e manchetes recentes.">
+    <meta property="og:title" content="Cliente - Últimas Notícias sobre Desastres Naturais">
+    <meta property="og:description" content="Atualize-se com as últimas notícias sobre desastres naturais no Brasil. Veja gráficos informativos e manchetes recentes.">
+    <meta property="og:image" content="path_to_image">
+    <meta property="og:url" content="page_url">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Cliente</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <img src="./src/img/logo.png" alt="Eco Alert Logo">
+            <h1>Eco Alert</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="text">
+            <h2>Bem-vindo ao Eco Alert</h2>
+            <p>
+                Seu portal de segurança e preservação ambiental. Encontre informações úteis sobre como contribuir para a conservação do meio ambiente e se manter seguro diante de desastres naturais. Navegue pelo site para dicas, práticas sustentáveis e muito mais. Juntos, podemos fazer a diferença para um planeta mais seguro e saudável.
+            </p>
+        </div>
+        <div class="form-container">
+            <h3>Sistema de Alertas Climáticos</h3>
+            <form id="cep-form">
+                <label for="cep">Digite seu CEP:</label>
+                <input type="text" id="cep" name="cep" required class="form-control">
+                <div class="email-input">
+                    <label for="email">Digite seu Email:</label>
+                    <input type="email" id="email" name="email" required class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Verificar Alertas</button>
+            </form>
+            <p>Ao fornecer seu CEP, enviaremos um alerta por e-mail sobre possíveis desastres naturais na sua região.</p>
+        
+            <div id="address-info" style="display:none;">
+                <h4>Endereço:</h4>
+                <p id="logradouro"></p>
+                <p id="bairro"></p>
+                <p id="localidade"></p>
+                <p id="uf"></p>
+            </div>
+            <div id="weather-info" style="display:none;">
+                <h4>Informações Meteorológicas:</h4>
+                <p id="weather-description"></p>
+                <p id="temperature"></p>
+                <p id="humidity"></p>
+                <p id="wind-speed"></p>
+            </div>
+        </div>
+
+        <h3>Últimos Desastres Naturais dos Últimos Anos</h3>
+        <p>Fique atualizado com os dados dos últimos desastres naturais que ocorreram nos últimos anos no Brasil. Veja abaixo gráficos informativos e as principais estatísticas recentes.</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Quantidade de Chuvas por Mês</h5>
+                        <canvas id="rainfallChart" aria-label="Gráfico de Barras mostrando a quantidade de chuvas por mês" role="img"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nível de Água dos Rios</h5>
+                        <canvas id="waterLevelChart" aria-label="Gráfico de Linhas mostrando o nível de água dos rios por mês" role="img"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Temperaturas Médias por Mês</h5>
+                    <canvas id="temperatureChart" aria-label="Gráfico de Linhas mostrando a temperatura média por mês" role="img"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Eco Alert. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.getElementById('cep-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const cep = document.getElementById('cep').value;
+            const email = document.getElementById('email').value;
+            fetchAddressData(cep);
+            fetchWeatherData(cep);
+            sendEmailAlert(email, cep);
+        });
+
+        function fetchAddressData(cep) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        alert('CEP não encontrado.');
+                    } else {
+                        document.getElementById('logradouro').textContent = `Logradouro: ${data.logradouro}`;
+                        document.getElementById('bairro').textContent = `Bairro: ${data.bairro}`;
+                        document.getElementById('localidade').textContent = `Localidade: ${data.localidade}`;
+                        document.getElementById('uf').textContent = `UF: ${data.uf}`;
+                        document.getElementById('address-info').style.display = 'block';
+                    }
+                });
+        }
+
+        function fetchWeatherData(cep) {
+            // Aqui você deve substituir a URL abaixo pela URL da API de clima que você está utilizando.
+            fetch(`https://api.exemplo.com/weather?cep=${cep}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('weather-description').textContent = `Descrição: ${data.weather[0].description}`;
+                    document.getElementById('temperature').textContent = `Temperatura: ${data.main.temp} °C`;
+                    document.getElementById('humidity').textContent = `Umidade: ${data.main.humidity}%`;
+                    document.getElementById('wind-speed').textContent = `Velocidade do Vento: ${data.wind.speed} m/s`;
+                    document.getElementById('weather-info').style.display = 'block';
+                });
+        }
+
+        function sendEmailAlert(email, cep) {
+            // Simulação de envio de email com alertas de desastres naturais
+            // Aqui você deve substituir pela chamada à sua API de envio de email
+            alert(`Um alerta de desastres naturais será enviado para o email ${email} para o CEP ${cep}.`);
+        }
+
+        // Função para buscar dados de desastres naturais de APIs fictícias e renderizar gráficos
+        async function fetchDisasterData() {
+            try {
+                // Dados fictícios para os gráficos
+                const rainfallData = {
+                    months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    rainfall: [120, 110, 140, 130, 150, 160, 100, 90, 80, 70, 60, 50]
+                };
+                const waterLevelData = {
+                    months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    waterLevel: [2.3, 2.5, 2.7, 2.6, 2.8, 3.0, 3.2, 3.1, 3.3, 3.4, 3.5, 3.6]
+                };
+                const temperatureData = {
+                    months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    temperature: [25, 26, 28, 27, 29, 30, 31, 32, 30, 29, 28, 27]
+                };
+
+                renderRainfallChart(rainfallData);
+                renderWaterLevelChart(waterLevelData);
+                renderTemperatureChart(temperatureData);
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
+        }
+
+        function renderRainfallChart(data) {
+            const ctx = document.getElementById('rainfallChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.months,
+                    datasets: [{
+                        label: 'Quantidade de Chuvas (mm)',
+                        data: data.rainfall,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderWaterLevelChart(data) {
+            const ctx = document.getElementById('waterLevelChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.months,
+                    datasets: [{
+                        label: 'Nível de Água (m)',
+                        data: data.waterLevel,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTemperatureChart(data) {
+            const ctx = document.getElementById('temperatureChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.months,
+                    datasets: [{
+                        label: 'Temperatura Média (°C)',
+                        data: data.temperature,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chama a função para buscar dados ao carregar a página
+        fetchDisasterData();
+    </script>
+</body>
+</html>
