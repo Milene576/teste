@@ -1,0 +1,113 @@
+ <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #0d1321;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            background-color: #0d1321;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px 0;
+            text-align: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 40%;
+            margin-right: 20px;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #00c8ff;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            width: 90%;
+        }
+        .card {
+            background-color: #1c2533;
+            border: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card-body {
+            color: #b0c7d1;
+        }
+        .card-title {
+            color: #00c8ff;
+        }
+        .card a {
+            color: #00c8ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .card a:hover {
+            color: white;
+        }
+        .chart-container {
+            margin-top: 40px;
+        }
+        h3 {
+            color: #00c8ff;
+            margin-top: 20px;
+            text-align: center;
+        }
+        p {
+            color: #b0c7d1;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        footer {
+            background-color: #0d1321;
+            padding: 20px;
+            text-align: center;
+            color: #b0c7d1;
+        }
+        .form-container {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: #1c2533;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container input, .form-container button {
+            margin-top: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+        .text {
+            text-align: justify;
+            font-size: 18px;
+            line-height: 1.8;
+            padding: 20px;
+            background-color: #1c2533;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            margin-bottom: 20px;
+        }
+    </style>
