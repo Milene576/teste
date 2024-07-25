@@ -1,18 +1,40 @@
 import sqlite3
 
-def insert_user(cep, email):
+def create_user_table():
+    """Cria a tabela 'user' se ela não existir no banco de dados."""
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
-        # Verifica se o e-mail já existe no banco de dados
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS user (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cep TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE
+        );
+        ''')
+        conn.commit()
+        print("Tabela 'user' criada com sucesso.")
+
+    except sqlite3.Error as error:
+        print("Erro ao criar a tabela user:", error)
+
+    finally:
+        if conn:
+            conn.close()
+
+def insert_user(cep, email):
+    """Insere um novo usuário na tabela 'user'."""
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
         cursor.execute("SELECT * FROM user WHERE email=?", (email,))
         existing_user = cursor.fetchone()
         if existing_user:
             print("Este e-mail já está cadastrado.")
             return False
 
-        # Se o e-mail não existe, realiza a inserção
         cursor.execute("INSERT INTO user (cep, email) VALUES (?, ?)", (cep, email))
         conn.commit()
         print("Usuário cadastrado com sucesso!")
@@ -26,7 +48,11 @@ def insert_user(cep, email):
         if conn:
             conn.close()
 
+# Criar a tabela 'user' se ela não existir
+create_user_table()
+
 # Exemplo de uso
 cep = "04854200"
-email = ""
+email = "exemplo@dominio.com"
 insert_user(cep, email)
+
